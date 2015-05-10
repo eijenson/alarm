@@ -5,18 +5,26 @@ import java.util.Date;
 /**
  * Created by user on 2015/04/30.
  */
-public class AleamData {
+public class AlarmData {
+    private long id;
     private String name;
     private Date date;
     private boolean enabled;
-    public AleamData(){
+    public AlarmData(){
 
     }
-    public AleamData(String name , Date date){
+
+    public AlarmData(long id,String name, long time){
+        setId(id);
+        setName(name);
+        setDate(new Date(time));
+    }
+    public AlarmData(long id , String name , Date date , boolean enable){
+        setId(id);
         setName(name);
         setDate(date);
+        setEnabled(enable);
     }
-
     public String getName() {
         return name;
     }
@@ -43,5 +51,13 @@ public class AleamData {
 
     public String toString(){
         return name;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

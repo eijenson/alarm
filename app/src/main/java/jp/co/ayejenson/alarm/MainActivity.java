@@ -5,10 +5,14 @@ import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.Date;
+
+import jp.co.ayejenson.alarm.entity.AlarmData;
+import jp.co.ayejenson.alarm.model.Alarm;
 
 
 public class MainActivity extends ActionBarActivity implements ListFragment.OnFragmentInteractionListener ,SettingFragment.OnFragmentInteractionListener{
@@ -37,9 +41,13 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_newAlarm) {
+            Log.d("Menu", "Setting");
+            Alarm alarm =  Alarm.getInstance(this);
+            Long newAlarmId = alarm.newAlarmData();
+            ListFragment lf = (ListFragment)getFragmentManager().findFragmentById(R.id.container);
+            lf.alarmListReload();
             return true;
         }
 
@@ -47,8 +55,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
     @Override
-    public void onFragmentInteraction(String id) {
-        SettingFragment sf = SettingFragment.newInstance("test",new Date().toString());
+    public void onFragmentInteraction(Long alarmId) {
+        SettingFragment sf = SettingFragment.newInstance(alarmId);
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.container,sf).addToBackStack(null).commit();

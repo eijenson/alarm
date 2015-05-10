@@ -1,11 +1,11 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" tools:context="jp.co.ayejenson.alarm.SettingFragment">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="678dp"
         android:layout_gravity="left|top"
         android:weightSum="1">
 
@@ -16,11 +16,9 @@
             android:text="@string/label_alarm_name"
             android:id="@+id/label_alarm_name" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <EditText
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/form_alarm_name"
             android:id="@+id/form_alarm_name" />
 
         <TextView
@@ -30,12 +28,28 @@
             android:text="@string/label_alarm_date"
             android:id="@+id/label_alarm_date" />
 
+        <DatePicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/form_alarm_date" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/form_alarm_date"
-            android:id="@+id/form_alarm_date" />
+            android:text="@string/label_alarm_time"
+            android:id="@+id/label_alarm_time" />
+
+        <TimePicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/form_alarm_time" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/form_alarm_submit"
+            android:id="@+id/form_alarm_submit" />
     </LinearLayout>
 
-</FrameLayout>
+</ScrollView>

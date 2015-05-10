@@ -13,9 +13,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-import jp.co.ayejenson.alarm.dummy.DummyContent;
-import jp.co.ayejenson.alarm.entity.AleamData;
-import jp.co.ayejenson.alarm.model.Aleam;
+import java.util.ArrayList;
+
+import jp.co.ayejenson.alarm.entity.AlarmData;
+import jp.co.ayejenson.alarm.model.Alarm;
 
 public class ListFragment extends Fragment implements AbsListView.OnItemClickListener {
 
@@ -26,7 +27,8 @@ public class ListFragment extends Fragment implements AbsListView.OnItemClickLis
 
     private OnFragmentInteractionListener mListener;
     private AbsListView mListView;
-    private ListAdapter mAdapter;
+    private ArrayAdapter mAdapter;
+    private ArrayList<AlarmData> alarmList;
     public ListFragment() {
     }
 
@@ -43,9 +45,10 @@ public class ListFragment extends Fragment implements AbsListView.OnItemClickLis
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        Aleam aleam = new Aleam();
-        mAdapter =  new ArrayAdapter<AleamData>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, aleam.getAleamList());
+        Alarm alarm =  Alarm.getInstance(getActivity());
+        alarmList = (ArrayList)alarm.getAlarmList();
+        mAdapter =  new ArrayAdapter<AlarmData>(getActivity(),
+                android.R.layout.simple_list_item_1, android.R.id.text1, alarmList);
     }
 
     @Override
@@ -78,12 +81,18 @@ public class ListFragment extends Fragment implements AbsListView.OnItemClickLis
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.d("ALEAM", "position" + position + "id" + id);
         if (null != mListener) {
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
-            Log.d("ALEAM", "position" + position + "id" + id);
+            mListener.onFragmentInteraction(alarmList.get(position).getId());
         }
     }
 
+    public void alarmListReload(){
+        Alarm alarm =  Alarm.getInstance(getActivity());
+        alarmList = (ArrayList)alarm.getAlarmList();
+        mAdapter.clear();
+        mAdapter.addAll(alarmList);
+    }
     public void setEmptyText(CharSequence emptyText) {
         View emptyView = mListView.getEmptyView();
 
@@ -93,7 +102,7 @@ public class ListFragment extends Fragment implements AbsListView.OnItemClickLis
     }
 
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(String id);
+        public void onFragmentInteraction(Long alarmId);
     }
 
 }
