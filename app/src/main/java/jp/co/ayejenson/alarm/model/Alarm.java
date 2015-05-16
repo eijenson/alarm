@@ -37,9 +37,11 @@ public class Alarm {
         alarmList = new ArrayList<AlarmData>();
         //query(テーブル名,取得列名,where句,where句,groupBy句,Having句,orderBy句,limit句)
         Cursor c = alarmTable.query(tableName,null,null,null,null,null,null,null);
-        while(c.moveToNext()){
-            alarmList.add(new AlarmData(c.getLong(c.getColumnIndex("id")),c.getString(c.getColumnIndex("name")),c.getLong(c.getColumnIndex("date"))));
-            Log.d("アラームリスト取得", c.getString(0)+c.getString(1)+c.getString(2)+c.getString(3));
+        if(c.moveToFirst()) {
+            while (c.moveToNext()) {
+                alarmList.add(new AlarmData(c.getLong(c.getColumnIndex("id")), c.getString(c.getColumnIndex("name")), c.getLong(c.getColumnIndex("date")), c.getInt(c.getColumnIndex("enabled"))>0));
+                Log.d("アラームリスト取得", c.getString(0) + c.getString(1) + c.getString(2) + c.getString(3));
+            }
         }
         return alarmList;
     }
@@ -50,7 +52,8 @@ public class Alarm {
         //query(テーブル名,取得列名,where句,検索条件のはてな,groupBy句,Having句,orderBy句,limit句)
         Cursor c = alarmTable.query(tableName,null,"id=?",whereText,null,null,null,null);
         if(c.moveToFirst()){
-            return new AlarmData(c.getLong(c.getColumnIndex("id")),c.getString(c.getColumnIndex("name")),c.getLong(c.getColumnIndex("date")));
+            Log.d("一件アラーム取得",c.getString(0)+c.getString(1)+c.getString(2)+"  "+c.getString(3));
+            return new AlarmData(c.getLong(c.getColumnIndex("id")),c.getString(c.getColumnIndex("name")),c.getLong(c.getColumnIndex("date")),c.getInt(c.getColumnIndex("enabled"))>0);
         }else{
             return null;
         }
@@ -73,6 +76,7 @@ public class Alarm {
         value.put("name",ad.getName());
         value.put("date",ad.getDate().getTime());
         value.put("enabled",ad.isEnabled());
+        Log.d("enabled=",""+ad.isEnabled());
         return alarmTable.update(tableName,value,"id=?",new String[]{String.valueOf(ad.getId())});
     }
     public long newAlarmData(){

@@ -9,14 +9,14 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class AlarmDataBase extends SQLiteOpenHelper{
     private final static String DB_NAME = "alarmdb";
-    private final static int DB_VERSION = 1;
+    private final static int DB_VERSION = 3;
     private final static String TABLE_NAME = "alarm";
     private final static String TABLE_CREATE_SQL =
             "CREATE TABLE "+TABLE_NAME+" (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT ," +
             "name TEXT NOT NULL ," +
             "date INTEGER," +
-            "enabled INTEGER NOT NULL" +
+            "enabled BOOLEAN NOT NULL" +
             ")";
     private static final String TABLE_DROP_SQL = "drop table "+TABLE_NAME+";";
 
@@ -32,6 +32,7 @@ public class AlarmDataBase extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(TABLE_DROP_SQL);
+        db.execSQL(TABLE_CREATE_SQL);
     }
     public String getTableName(){
         return TABLE_NAME;

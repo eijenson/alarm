@@ -14,10 +14,11 @@ public class AlarmData {
 
     }
 
-    public AlarmData(long id,String name, long time){
+    public AlarmData(long id,String name, long time,boolean enabled){
         setId(id);
         setName(name);
         setDate(new Date(time));
+        setEnabled(enabled);
     }
     public AlarmData(long id , String name , Date date , boolean enable){
         setId(id);
@@ -60,4 +61,5 @@ public class AlarmData {
     public void setId(long id) {
         this.id = id;
     }
+
 }

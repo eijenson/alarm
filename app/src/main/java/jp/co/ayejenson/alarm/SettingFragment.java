@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -34,6 +35,7 @@ public class SettingFragment extends Fragment{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String FORM_ALARM_NAME = "form_alarm_name";
     private static final String FORM_ALARM_DATE = "form_alarm_date";
+    private static final String FORM_ALARM_ENABLED = "form_alarm_enabled";
     private static final String ALEAM_ID = "alarmId";
 
     private OnFragmentInteractionListener mListener;
@@ -53,8 +55,9 @@ public class SettingFragment extends Fragment{
         args.putLong(ALEAM_ID,ad.getId());
         args.putString(FORM_ALARM_NAME, ad.getName());
         args.putSerializable(FORM_ALARM_DATE, ad.getDate());
+        args.putBoolean(FORM_ALARM_ENABLED,ad.isEnabled());
         fragment.setArguments(args);
-        Log.d("Setting","args"+args.getLong(ALEAM_ID)+""+args.getString(FORM_ALARM_NAME)+""+args.getSerializable(FORM_ALARM_DATE));
+        Log.d("Setting","args"+args.getLong(ALEAM_ID)+""+args.getString(FORM_ALARM_NAME)+""+args.getSerializable(FORM_ALARM_DATE)+""+args.getBoolean(FORM_ALARM_ENABLED));
         return fragment;
     }
 
@@ -78,6 +81,7 @@ public class SettingFragment extends Fragment{
                 Long id = getArguments().getLong(ALEAM_ID);
                 String name = ((EditText)view.findViewById(R.id.form_alarm_name)).getText().toString();
                 DatePicker datePicker = (DatePicker)view.findViewById(R.id.form_alarm_date);
+                boolean enabled = ((Switch)view.findViewById(R.id.form_alarm_enabled)).isChecked();
                 int year = datePicker.getYear();
                 int month = datePicker.getMonth();
                 int day = datePicker.getDayOfMonth();
@@ -87,7 +91,7 @@ public class SettingFragment extends Fragment{
                 Calendar cal = Calendar.getInstance();
                 cal.set(year,month,day,hour,minute);
                 Date date = cal.getTime();
-                AlarmData ad = new AlarmData(id,name,date,true);
+                AlarmData ad = new AlarmData(id,name,date,enabled);
                 Alarm alarm = Alarm.getInstance(getActivity());
                 long l = alarm.updateAlarmData(ad);
                 Log.d("UPDATE","result"+l+""+id);
@@ -102,6 +106,7 @@ public class SettingFragment extends Fragment{
         TextView name = (TextView) view.findViewById(R.id.form_alarm_name);
         DatePicker date = (DatePicker) view.findViewById(R.id.form_alarm_date);
         TimePicker time = (TimePicker) view.findViewById(R.id.form_alarm_time);
+        Switch enabled = ((Switch)view.findViewById(R.id.form_alarm_enabled));
         Bundle args = getArguments();
         if (args != null) {
             name.setText(args.getString(FORM_ALARM_NAME));
@@ -111,8 +116,7 @@ public class SettingFragment extends Fragment{
             date.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
             time.setCurrentHour(cal.get(Calendar.HOUR_OF_DAY));
             time.setCurrentMinute(cal.get(Calendar.MINUTE));
-            Log.d("date",""+cal.get(Calendar.YEAR)+""+cal.get(Calendar.MONTH)+""+cal.get(Calendar.DAY_OF_MONTH)+"");
-            Log.d("date",""+cal.get(Calendar.HOUR_OF_DAY)+cal.get(Calendar.MINUTE));
+            enabled.setChecked(args.getBoolean(FORM_ALARM_ENABLED));
         }
     }
 
