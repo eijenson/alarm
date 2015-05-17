@@ -70,6 +70,8 @@ public class SettingFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //アクションバーメニュー非表示
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -97,7 +99,7 @@ public class SettingFragment extends Fragment{
                 int hour = timePicker.getCurrentHour();
                 int minute = timePicker.getCurrentMinute();
                 Calendar cal = Calendar.getInstance();
-                cal.set(year,month,day,hour,minute);
+                cal.set(year,month,day,hour,minute,0);
                 Date date = cal.getTime();
                 AlarmData ad = new AlarmData(id,name,date,enabled);
                 //入力チェック
@@ -131,13 +133,13 @@ public class SettingFragment extends Fragment{
         return view;
     }
 
-    public boolean checkAlarmData(AlarmData ad){
-        if(ad.getName().equals("")){
+    public boolean checkAlarmData(AlarmData ad) {
+        if (ad.getName().equals("")) {
             Toast.makeText(getActivity(), R.string.toast_check_blank_name, Toast.LENGTH_SHORT).show();
             return false;
         }
         //設定した日付が、現在よりも前ならエラー
-        if(ad.getDate().before(new Date())){
+        if (ad.getDate().before(new Date())) {
             Toast.makeText(getActivity(), R.string.toast_check_date, Toast.LENGTH_SHORT).show();
             return false;
         }

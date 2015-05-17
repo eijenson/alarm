@@ -31,12 +31,8 @@ public class AlertFragment extends Fragment {
 
     public static AlertFragment newInstance(Long alarmId) {
         AlertFragment fragment = new AlertFragment();
-        Alarm alarm = Alarm.getInstance(fragment.getActivity());
-        AlarmData ad = alarm.getAlarmData(alarmId);
         Bundle args = new Bundle();
         args.putLong(ALARM_ID, alarmId);
-        args.putString(ALARM_NAME,ad.getName());
-        args.putSerializable(ALARM_DATE,ad.getDate());
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,6 +45,12 @@ public class AlertFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            Alarm alarm = Alarm.getInstance(getActivity());
+            Long alarmId = getArguments().getLong(ALARM_ID);
+            AlarmData ad = alarm.getAlarmData(alarmId);
+            Bundle args = getArguments();
+            args.putString(ALARM_NAME,ad.getName());
+            args.putSerializable(ALARM_DATE,ad.getDate());
         }
     }
 

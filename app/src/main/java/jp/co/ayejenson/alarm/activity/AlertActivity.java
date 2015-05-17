@@ -26,7 +26,7 @@ public class AlertActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setVolumeControlStream(AudioManager.STREAM_DTMF);
+        setVolumeControlStream(AudioManager.STREAM_RING);
         setContentView(R.layout.activity_alert);
         Intent i = getIntent();
         AlertFragment af = AlertFragment.newInstance(i.getLongExtra("alarmId",-1));

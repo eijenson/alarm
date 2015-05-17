@@ -20,7 +20,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.List
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setVolumeControlStream(AudioManager.STREAM_DTMF);
+        setVolumeControlStream(AudioManager.STREAM_RING);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         setContentView(R.layout.activity_main);
         ListFragment lf = ListFragment.newInstance();
