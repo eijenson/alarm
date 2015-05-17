@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import jp.co.ayejenson.alarm.AlertActivity;
+import jp.co.ayejenson.alarm.activity.AlertActivity;
 
 /**
  * Created by user on 2015/05/17.

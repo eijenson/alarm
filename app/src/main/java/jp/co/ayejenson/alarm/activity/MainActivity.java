@@ -1,23 +1,20 @@
-package jp.co.ayejenson.alarm;
+package jp.co.ayejenson.alarm.activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.Date;
-
-import jp.co.ayejenson.alarm.entity.AlarmData;
+import jp.co.ayejenson.alarm.ListFragment;
+import jp.co.ayejenson.alarm.R;
+import jp.co.ayejenson.alarm.SettingFragment;
 import jp.co.ayejenson.alarm.model.Alarm;
 
 
-public class MainActivity extends ActionBarActivity implements ListFragment.OnFragmentInteractionListener ,SettingFragment.OnFragmentInteractionListener{
+public class MainActivity extends ActionBarActivity implements ListFragment.ListFragmentListener,SettingFragment.SettingFragmentListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +46,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
             Alarm alarm =  Alarm.getInstance(this);
             Long newAlarmId = alarm.newAlarmData();
             ListFragment lf = (ListFragment)getFragmentManager().findFragmentById(R.id.container);
+            moveSettingFragment(newAlarmId);
             lf.alarmListReload();
             return true;
         }
@@ -57,7 +55,7 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
     @Override
-    public void onFragmentInteraction(Long alarmId) {
+    public void moveSettingFragment(Long alarmId) {
         SettingFragment sf = SettingFragment.newInstance(alarmId);
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -65,8 +63,11 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void moveListFragment() {
+        ListFragment lf = ListFragment.newInstance();
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.container,lf).addToBackStack(null).commit();
     }
 
 

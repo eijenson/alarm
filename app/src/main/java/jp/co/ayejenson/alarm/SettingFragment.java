@@ -1,11 +1,6 @@
 package jp.co.ayejenson.alarm;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -24,14 +19,12 @@ import java.util.Date;
 
 import jp.co.ayejenson.alarm.entity.AlarmData;
 import jp.co.ayejenson.alarm.model.Alarm;
-import jp.co.ayejenson.alarm.receiver.AlarmReceiver;
-import jp.co.ayejenson.alarm.service.AlertService;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SettingFragment.OnFragmentInteractionListener} interface
+ * {@link jp.co.ayejenson.alarm.SettingFragment.SettingFragmentListener} interface
  * to handle interaction events.
  * Use the {@link SettingFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -44,7 +37,7 @@ public class SettingFragment extends Fragment{
     private static final String FORM_ALARM_ENABLED = "form_alarm_enabled";
     private static final String ALEAM_ID = "alarmId";
 
-    private OnFragmentInteractionListener mListener;
+    private SettingFragmentListener mListener;
 
     /**
      * Use this factory method to create a new instance of
@@ -81,7 +74,7 @@ public class SettingFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_setting, container, false);
-        OnClickListener buttonOnClick = new OnClickListener() {
+        OnClickListener submitOnClick = new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Long id = getArguments().getLong(ALEAM_ID);
@@ -105,9 +98,21 @@ public class SettingFragment extends Fragment{
                 Alarm alarm = Alarm.getInstance(getActivity());
                 long l = alarm.updateAlarmData(ad);
                 Log.d("UPDATE","result"+l+""+id);
+                mListener.moveListFragment();
             }
         };
-        view.findViewById(R.id.form_alarm_submit).setOnClickListener(buttonOnClick);
+        OnClickListener deleteOnClick = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Long alarmId = getArguments().getLong(ALEAM_ID);
+                Alarm alarm = Alarm.getInstance(getActivity());
+                long l = alarm.deleteAlarmData(alarmId);
+                Log.d("DELETE","result"+l+""+alarmId);
+                mListener.moveListFragment();
+            }
+        };
+        view.findViewById(R.id.form_alarm_submit).setOnClickListener(submitOnClick);
+        view.findViewById(R.id.form_alarm_delete).setOnClickListener(deleteOnClick);
         return view;
     }
 
@@ -134,7 +139,7 @@ public class SettingFragment extends Fragment{
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (SettingFragmentListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -157,9 +162,8 @@ public class SettingFragment extends Fragment{
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+    public interface SettingFragmentListener {
+        public void moveListFragment();
     }
 
 }

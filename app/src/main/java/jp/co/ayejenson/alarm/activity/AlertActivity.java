@@ -1,8 +1,10 @@
-package jp.co.ayejenson.alarm;
+package jp.co.ayejenson.alarm.activity;
 
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -15,14 +17,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
+import jp.co.ayejenson.alarm.AlertFragment;
+import jp.co.ayejenson.alarm.R;
+
 
 public class AlertActivity extends Activity implements AlertFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setVolumeControlStream(AudioManager.STREAM_ALARM);
         setContentView(R.layout.activity_alert);
-        AlertFragment af = AlertFragment.newInstance();
+        Intent i = getIntent();
+        AlertFragment af = AlertFragment.newInstance(i.getLongExtra("alarmId",-1));
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.container,af).commit();
@@ -39,20 +46,13 @@ public class AlertActivity extends Activity implements AlertFragment.OnFragmentI
     public void onFragmentInteraction(Uri uri) {
 
     }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_alert, container, false);
-            return rootView;
+    @Override
+    public void onBackPressed(){
+        int backStackCnt = getFragmentManager().getBackStackEntryCount();
+        if(backStackCnt != 0) {
+            getFragmentManager().popBackStack();
+        }else{
+            super.onBackPressed();
         }
     }
 }

@@ -25,7 +25,7 @@ public class ListFragment extends Fragment implements AbsListView.OnItemClickLis
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    private ListFragmentListener mListener;
     private AbsListView mListView;
     private ArrayAdapter mAdapter;
     private ArrayList<AlarmData> alarmList;
@@ -65,7 +65,7 @@ public class ListFragment extends Fragment implements AbsListView.OnItemClickLis
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (ListFragmentListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -83,7 +83,7 @@ public class ListFragment extends Fragment implements AbsListView.OnItemClickLis
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d("ALEAM", "position" + position + "id" + id);
         if (null != mListener) {
-            mListener.onFragmentInteraction(alarmList.get(position).getId());
+            mListener.moveSettingFragment(alarmList.get(position).getId());
         }
     }
 
@@ -101,8 +101,8 @@ public class ListFragment extends Fragment implements AbsListView.OnItemClickLis
         }
     }
 
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Long alarmId);
+    public interface ListFragmentListener {
+        public void moveSettingFragment(Long alarmId);
     }
 
 }

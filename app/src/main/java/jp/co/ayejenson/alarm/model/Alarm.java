@@ -14,12 +14,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import jp.co.ayejenson.alarm.AlertActivity;
-import jp.co.ayejenson.alarm.MainActivity;
 import jp.co.ayejenson.alarm.database.AlarmDataBase;
 import jp.co.ayejenson.alarm.entity.AlarmData;
 import jp.co.ayejenson.alarm.receiver.AlarmReceiver;
-import jp.co.ayejenson.alarm.service.AlertService;
 
 public class Alarm {
     private List<AlarmData> alarmList;
@@ -93,6 +90,12 @@ public class Alarm {
         return updateRow;
 
     }
+
+    public long deleteAlarmData(Long alarmId){
+        int deleteRow = alarmTable.delete(tableName,"id=?",new String[]{String.valueOf(alarmId)});
+        return deleteRow;
+    }
+
     public long newAlarmData(){
         ContentValues value = new ContentValues();
         value.put("name",newAlarmName);
@@ -108,7 +111,7 @@ public class Alarm {
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         //TODO うまく行ったら消す
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.SECOND, 5);
+        cal.add(Calendar.SECOND, 3);
         long time = cal.getTimeInMillis();
         //TODO ここまで
         if(ad.isEnabled()) {
