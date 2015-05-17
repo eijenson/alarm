@@ -1,17 +1,25 @@
 package jp.co.ayejenson.alarm.model;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import jp.co.ayejenson.alarm.AlertActivity;
+import jp.co.ayejenson.alarm.MainActivity;
 import jp.co.ayejenson.alarm.database.AlarmDataBase;
 import jp.co.ayejenson.alarm.entity.AlarmData;
+import jp.co.ayejenson.alarm.receiver.AlarmReceiver;
+import jp.co.ayejenson.alarm.service.AlertService;
 
 public class Alarm {
     private List<AlarmData> alarmList;
@@ -19,15 +27,17 @@ public class Alarm {
     private String tableName;
     private static Alarm alarm;
     private String newAlarmName = "新規アラーム";
-
+    private Context context;
     public static Alarm getInstance(Context c){
         if(alarm == null){
            alarm =  new Alarm(c);
         }
+        alarm.context = c;
         return alarm;
     }
 
     private Alarm(Context c){
+        context = c;
         AlarmDataBase alarmDB = new AlarmDataBase(c);
         alarmTable = alarmDB.getWritableDatabase();
         tableName = alarmDB.getTableName();
@@ -70,6 +80,7 @@ public class Alarm {
     public void setAlarmList(List<AlarmData> alarmList){
         this.alarmList = alarmList;
     }
+
     public long updateAlarmData(AlarmData ad){
         ContentValues value = new ContentValues();
         value.put("id",ad.getId());
@@ -77,7 +88,10 @@ public class Alarm {
         value.put("date",ad.getDate().getTime());
         value.put("enabled",ad.isEnabled());
         Log.d("enabled=",""+ad.isEnabled());
-        return alarmTable.update(tableName,value,"id=?",new String[]{String.valueOf(ad.getId())});
+        int updateRow = alarmTable.update(tableName,value,"id=?",new String[]{String.valueOf(ad.getId())});
+        setAlarmService(ad);
+        return updateRow;
+
     }
     public long newAlarmData(){
         ContentValues value = new ContentValues();
@@ -90,4 +104,28 @@ public class Alarm {
         c.moveToFirst();
         return c.getLong(0);
     }
+    public void setAlarmService(AlarmData ad){
+        AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        //TODO うまく行ったら消す
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.SECOND, 5);
+        long time = cal.getTimeInMillis();
+        //TODO ここまで
+        if(ad.isEnabled()) {
+            Log.d("アラーム登録",""+ad.getDate());
+            Log.d("アラーム登録",""+new Date(time));
+            am.setExact(AlarmManager.RTC_WAKEUP, time, getPendingIntent(ad));
+        }else{
+            am.cancel(getPendingIntent(ad));
+        }
+    }
+
+    private PendingIntent getPendingIntent(AlarmData ad){
+
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtra("alarmId",ad.getId());
+        PendingIntent pendintIntent = PendingIntent.getBroadcast(context, 99, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return pendintIntent;
+    }
+
 }

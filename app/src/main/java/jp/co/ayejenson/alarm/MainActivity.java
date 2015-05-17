@@ -2,6 +2,8 @@ package jp.co.ayejenson.alarm;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -66,6 +68,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.OnFr
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+
 
     @Override
     public void onBackPressed(){

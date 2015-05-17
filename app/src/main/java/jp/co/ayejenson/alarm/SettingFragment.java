@@ -1,6 +1,10 @@
 package jp.co.ayejenson.alarm;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -20,6 +24,8 @@ import java.util.Date;
 
 import jp.co.ayejenson.alarm.entity.AlarmData;
 import jp.co.ayejenson.alarm.model.Alarm;
+import jp.co.ayejenson.alarm.receiver.AlarmReceiver;
+import jp.co.ayejenson.alarm.service.AlertService;
 
 
 /**
@@ -45,7 +51,7 @@ public class SettingFragment extends Fragment{
      * this fragment using the provided parameters.
      *
      * @param alarmId
-     * @return A new instance of fragment setting.
+     * @return 生成したフラグメント
      */
     public static SettingFragment newInstance(Long alarmId) {
         SettingFragment fragment = new SettingFragment();
@@ -90,6 +96,10 @@ public class SettingFragment extends Fragment{
                 int minute = timePicker.getCurrentMinute();
                 Calendar cal = Calendar.getInstance();
                 cal.set(year,month,day,hour,minute);
+                //TODO アラームテスト終わったら消す
+                cal.setTime(new Date());
+                cal.add(Calendar.SECOND,5);
+                //TODO ここまで
                 Date date = cal.getTime();
                 AlarmData ad = new AlarmData(id,name,date,enabled);
                 Alarm alarm = Alarm.getInstance(getActivity());

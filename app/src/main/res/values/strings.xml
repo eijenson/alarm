@@ -14,4 +14,6 @@
     <string name="form_alarm_time">今の時間</string>
     <string name="form_alarm_submit">設定</string>
     <string name="form_alarm_enabled">有効設定</string>
+    <string name="title_activity_alert">AlertActivity</string>
+    <string name="button_alert_close">閉じる</string>
 </resources>
