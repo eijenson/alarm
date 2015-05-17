@@ -2,6 +2,7 @@ package jp.co.ayejenson.alarm.activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.media.AudioManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,8 @@ public class MainActivity extends ActionBarActivity implements ListFragment.List
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setVolumeControlStream(AudioManager.STREAM_DTMF);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         setContentView(R.layout.activity_main);
         ListFragment lf = ListFragment.newInstance();
         FragmentManager manager = getFragmentManager();
@@ -70,7 +73,10 @@ public class MainActivity extends ActionBarActivity implements ListFragment.List
         transaction.replace(R.id.container,lf).addToBackStack(null).commit();
     }
 
-
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+    }
 
     @Override
     public void onBackPressed(){

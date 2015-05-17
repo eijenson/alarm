@@ -20,11 +20,6 @@ import jp.co.ayejenson.alarm.model.Alarm;
 
 public class ListFragment extends Fragment implements AbsListView.OnItemClickListener {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
-    private String mParam2;
-
     private ListFragmentListener mListener;
     private AbsListView mListView;
     private ArrayAdapter mAdapter;
@@ -40,11 +35,6 @@ public class ListFragment extends Fragment implements AbsListView.OnItemClickLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         Alarm alarm =  Alarm.getInstance(getActivity());
         alarmList = (ArrayList)alarm.getAlarmList();
         mAdapter =  new ArrayAdapter<AlarmData>(getActivity(),
@@ -78,6 +68,11 @@ public class ListFragment extends Fragment implements AbsListView.OnItemClickLis
         mListener = null;
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        alarmListReload();
+    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -92,13 +87,6 @@ public class ListFragment extends Fragment implements AbsListView.OnItemClickLis
         alarmList = (ArrayList)alarm.getAlarmList();
         mAdapter.clear();
         mAdapter.addAll(alarmList);
-    }
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
-
-        if (emptyView instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
-        }
     }
 
     public interface ListFragmentListener {

@@ -51,11 +51,26 @@
             android:text="@string/form_alarm_enabled"
             android:id="@+id/form_alarm_enabled" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/form_alarm_submit"
-            android:id="@+id/form_alarm_submit" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/form_alarm_submit"
+                android:id="@+id/form_alarm_submit"
+                android:layout_margin="5dp"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/form_alarm_delete"
+                android:id="@+id/form_alarm_delete"
+                android:layout_margin="5dp" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </ScrollView>

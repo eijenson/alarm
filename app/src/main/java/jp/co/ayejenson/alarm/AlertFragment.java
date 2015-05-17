@@ -3,7 +3,6 @@ package jp.co.ayejenson.alarm;
 import android.app.Activity;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,14 +20,6 @@ import java.util.Date;
 import jp.co.ayejenson.alarm.entity.AlarmData;
 import jp.co.ayejenson.alarm.model.Alarm;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link AlertFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link AlertFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AlertFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,7 +27,6 @@ public class AlertFragment extends Fragment {
     private static final String ALARM_NAME = "alarmName";
     private static final String ALARM_DATE = "alarmDate";
     private MediaPlayer media;
-    private OnFragmentInteractionListener mListener;
 
 
     public static AlertFragment newInstance(Long alarmId) {
@@ -96,7 +86,7 @@ public class AlertFragment extends Fragment {
         media = new MediaPlayer();
         try {
             media.setDataSource(getActivity(), uri);
-            media.setAudioStreamType(AudioManager.STREAM_ALARM);
+            media.setAudioStreamType(AudioManager.STREAM_DTMF);
             media.setLooping(true);
             media.prepare();
             media.start();
@@ -105,29 +95,15 @@ public class AlertFragment extends Fragment {
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         media.stop();
-        mListener = null;
     }
 
     @Override
@@ -135,20 +111,4 @@ public class AlertFragment extends Fragment {
         super.onPause();
         media.stop();
     }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
-
 }

@@ -21,12 +21,12 @@ import jp.co.ayejenson.alarm.AlertFragment;
 import jp.co.ayejenson.alarm.R;
 
 
-public class AlertActivity extends Activity implements AlertFragment.OnFragmentInteractionListener {
+public class AlertActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setVolumeControlStream(AudioManager.STREAM_ALARM);
+        setVolumeControlStream(AudioManager.STREAM_DTMF);
         setContentView(R.layout.activity_alert);
         Intent i = getIntent();
         AlertFragment af = AlertFragment.newInstance(i.getLongExtra("alarmId",-1));
@@ -35,17 +35,6 @@ public class AlertActivity extends Activity implements AlertFragment.OnFragmentI
         transaction.replace(R.id.container,af).commit();
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        return true;
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
     @Override
     public void onBackPressed(){
         int backStackCnt = getFragmentManager().getBackStackEntryCount();

@@ -109,15 +109,9 @@ public class Alarm {
     }
     public void setAlarmService(AlarmData ad){
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        //TODO うまく行ったら消す
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.SECOND, 3);
-        long time = cal.getTimeInMillis();
-        //TODO ここまで
         if(ad.isEnabled()) {
             Log.d("アラーム登録",""+ad.getDate());
-            Log.d("アラーム登録",""+new Date(time));
-            am.setExact(AlarmManager.RTC_WAKEUP, time, getPendingIntent(ad));
+            am.setExact(AlarmManager.RTC_WAKEUP, ad.getDate().getTime(), getPendingIntent(ad));
         }else{
             am.cancel(getPendingIntent(ad));
         }
@@ -127,7 +121,7 @@ public class Alarm {
 
         Intent intent = new Intent(context, AlarmReceiver.class);
         intent.putExtra("alarmId",ad.getId());
-        PendingIntent pendintIntent = PendingIntent.getBroadcast(context, 99, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendintIntent = PendingIntent.getBroadcast(context, (int)ad.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return pendintIntent;
     }
 

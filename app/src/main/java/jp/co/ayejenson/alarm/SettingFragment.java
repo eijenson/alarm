@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -70,6 +73,12 @@ public class SettingFragment extends Fragment{
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // メニューをクリア
+        menu.clear();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -89,15 +98,20 @@ public class SettingFragment extends Fragment{
                 int minute = timePicker.getCurrentMinute();
                 Calendar cal = Calendar.getInstance();
                 cal.set(year,month,day,hour,minute);
-                //TODO アラームテスト終わったら消す
-                cal.setTime(new Date());
-                cal.add(Calendar.SECOND,5);
-                //TODO ここまで
                 Date date = cal.getTime();
                 AlarmData ad = new AlarmData(id,name,date,enabled);
+                //入力チェック
+                if(!checkAlarmData(ad)) return ;
                 Alarm alarm = Alarm.getInstance(getActivity());
                 long l = alarm.updateAlarmData(ad);
                 Log.d("UPDATE","result"+l+""+id);
+                int toastMessage;
+                if(enabled) {
+                    toastMessage =R.string.toast_update_on;
+                }else{
+                    toastMessage =R.string.toast_update_off;
+                }
+                Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT).show();
                 mListener.moveListFragment();
             }
         };
@@ -108,6 +122,7 @@ public class SettingFragment extends Fragment{
                 Alarm alarm = Alarm.getInstance(getActivity());
                 long l = alarm.deleteAlarmData(alarmId);
                 Log.d("DELETE","result"+l+""+alarmId);
+                Toast.makeText(getActivity(), R.string.toast_delete, Toast.LENGTH_SHORT).show();
                 mListener.moveListFragment();
             }
         };
@@ -116,6 +131,18 @@ public class SettingFragment extends Fragment{
         return view;
     }
 
+    public boolean checkAlarmData(AlarmData ad){
+        if(ad.getName().equals("")){
+            Toast.makeText(getActivity(), R.string.toast_check_blank_name, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        //設定した日付が、現在よりも前ならエラー
+        if(ad.getDate().before(new Date())){
+            Toast.makeText(getActivity(), R.string.toast_check_date, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         TextView name = (TextView) view.findViewById(R.id.form_alarm_name);
